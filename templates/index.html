@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>*{font-family: sans-serif;}</style>
+    <title>Echo</title>
+</head>
+<body>
+
+    <h1>Request</h1>
+    <table>
+        <tr>
+            <td>Method</td>
+            <td>{{ .Method }}</td>
+        </tr>
+        <tr>
+            <td>Host</td>
+            <td>{{ .Host }}</td>
+        </tr>
+        <tr>
+            <td>Path</td>
+            <td>{{ .Path }}</td>
+        </tr>
+    </table>
+
+    <h2>Headers</h2>
+    <table>
+        <tr>
+            <th>Header</th>
+            <th>Value(s)</th>
+        </tr>
+        {{range $key, $value := .Headers}}
+        <tr>
+            <td>{{ $key }}</td>
+            <td>
+                {{range $value}} {{.}} {{end}}
+            </td>
+        </tr>
+        {{end}}
+    </table>
+
+    <h2>Body</h2>
+    {{if .Body}}
+    <pre>{{ .Body }}</pre>
+    {{else}}
+    <span>No Body</span>
+    {{end}} 
+</body>
+</html>
