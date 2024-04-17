@@ -4,21 +4,24 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
 
 type data struct {
-	Method  string
-	Host    string
-	Path    string
-	Headers map[string][]string
-	Body    string
+	Protocol string
+	Method   string
+	Host     string
+	Path     string
+	Headers  map[string][]string
+	Body     string
 }
 
 func handleRequest(c *gin.Context) {
 	var d data
 
+	d.Protocol = c.Request.Proto
 	d.Method = c.Request.Method
 	d.Headers = c.Request.Header
 	d.Host = c.Request.Host
@@ -33,8 +36,11 @@ func handleRequest(c *gin.Context) {
 }
 
 func main() {
+	port := os.Getenv("PORT")
+	templates := os.Getenv("TEMPLATES")
+
 	router := gin.Default()
-	router.LoadHTMLGlob("../../templates/*")
+	router.LoadHTMLGlob(templates + "/*")
 	router.NoRoute(handleRequest)
-	router.Run(":8080")
+	router.Run("0.0.0.0:" + port)
 }
